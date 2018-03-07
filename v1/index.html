@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+    <body id="gameoflife">
+        <canvas id="game-canvas" class="life-game" style="border:1px solid black;"></canvas><br>
+        <button type="button" class="toggle play">Comenzar</button>
+        <script src="gameoflife.js"></script>
+        <script>
+        var msf = 50;
+        
+        function game_toggle(game, force) {
+            var interval = game.getInterval();
+            if (force == "stop" || interval !== null) {
+                // Stop
+                clearInterval(interval);
+                game.setTheInterval(null);
+            } else {
+                // start
+                interval = setInterval(game.step, 100);
+                game.setTheInterval(interval);
+            }
+        }
+
+        function add_listeners(game, example_num) {
+            document.querySelector(".play.toggle").addEventListener("click", function(){
+                //game_toggle(game);
+                interval = setInterval(game.step, msf);
+                game.setTheInterval(interval);
+                
+            });
+
+        }
+
+        var game_cells = [
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,1,0,0,0,0,0,0],
+            [0,0,0,0,0,1,1,1,0,0,0,0,0],
+            [0,0,0,0,0,0,1,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0]
+  
+        ];
+
+        var game = new GameOfLife({
+            canvas_id:    "game-canvas",
+            cell_width:   10,
+            cell_height:  10,
+            init_cells:   game_cells
+        });
+        add_listeners(game, "gameoflife");</script>
+
+
+    </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        body{
+            margin:0;
+            padding: 0;
+            background:black;
+            font-family: 'Roboto', sans-serif;
+        }
+        #background{
+            width:100vw;
+            height:100vh;
+            background-image:url(inspiration/2.png);
+            background-position:center;
+            position:absolute;
+            background-size: cover;
+            top:0;
+            left:0;
+            filter:brightness(90%);
+            opacity:.9;
+        }
+        .layer-0, .layer-1, .layer-2, .layer-3, .layer-4, .layer-5, .layer-6, .layer-7, .layer-8, .layer-9{
+            position:absolute;
+            top:0;
+            left:0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+        .layer-1{z-index: 1;}
+        .layer-2{z-index: 2;}
+        .layer-3{z-index: 3;}
+        .layer-4{z-index: 4;}
+        .layer-5{z-index: 5;}
+        .layer-6{z-index: 6;}
+        .layer-7{z-index: 7;}
+        .layer-8{z-index: 8;}
+        .layer-9{z-index: 9;}
+
+        .separator{
+            height: 0px;
+            width: 100%;
+            border-top: 1px solid #7B8288;
+            border-bottom: 1px solid #54585E;
+            margin-top: -.6rem;
+        }
+
+        #title{
+            padding: 1rem 2.2rem;
+            color:white;
+            margin-bottom: .2rem;
+            
+        }
+        #title h1{
+            font-weight: 100 !important;
+            font-size: 1.5rem;
+        }
+        #menu ul li{
+            list-style:none;
+            color: #32E5DD;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 2em;
+            line-height: 2.2rem;
+            border-bottom: 8px solid rgba(255,255,255,0);
+            transition:all .5s;
+            display: inline-block;
+            margin-bottom:-1.3rem;
+            margin-right: 1.5rem;
+        }
+        #menu ul a:hover li{
+            border-bottom: 8px solid #54585E;
+        }
+        #menu ul a.active li{
+            border-bottom: 8px solid rgba(255,255,255,1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="background" class="layer-0"></div>
+    <div id="content" class="layer-1">
+        <header>
+            <div id="title">
+                
+                <h1>Computing Selected Topics: Complex Systems<!--<br><small>Alejandro Hernández Gómez </small>--></h1>
+            </div>
+            <nav id="menu">
+                <ul>
+                    <a href="#" class="active"><li>GameOfLife</li></a>
+                    <a href="#" class=""><li>Proyecto2</li></a>
+                </ul>
+            </nav>
+            <div class="separator"></div>
+        </header>
+        
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas 
+        id="game-of-life"
+        width="1000"
+        height="1000"
+        data-cols="90"
+        data-rows="90"
+        data-frequency="200"
+        data-cellcolor="#e1e1e1"
+        data-fillcolor="green"
+        data-cellsize="8"
+    ></canvas>
+    <script>
+
+        //Var declaration
+        var flag = 0;
+        var canvas_element = document.querySelector("#game-of-life"),
+            canvas_config = {
+                cols: canvas_element.dataset.cols,
+                rows: canvas_element.dataset.rows,
+                frequency: canvas_element.dataset.frequency,
+                style: {
+                    width: canvas_element.width,
+                    height: canvas_element.height,
+                    cellcolor: canvas_element.dataset.cellcolor,
+                    fillcolor: canvas_element.dataset.fillcolor,
+                    cellsize: canvas_element.dataset.cellsize
+                }
+            },
+            canvas = canvas_element.getContext('2d'), 
+            cells = [],
+            initial_state =[[60, 47],[61,47],[62,47],
+                            [60, 48],[61,48],[62,48],
+                            [60, 49],[61,49],[62,49],]
+
+        canvas.strokeStyle = canvas_config.style.cellcolor;
+        canvas.fillStyle = canvas_config.style.fillcolor;
+
+        start();
+
+        function start() {
+            
+            killcell(canvas_config.rows,canvas_config.cols);
+
+            
+            initial_state.forEach(function(point) {
+                console.log(point)
+                cells[point[0]][point[1]] = 1;
+            });
+            
+            update();
+        }
+
+        function killcell(rows, cols){
+            for (var i=0; i < cols; i++) {
+                cells[i] = [];
+                for (var j=0; j < rows; j++) {
+                    cells[i][j] = 0;
+                }
+            }
+        }
+
+        function update() {
+            
+            var result = [];
+            
+            function neighbours(x, y) {
+                var neighbours = 0;
+                
+                function isAlive(x, y) {
+                    return cells[x] && cells[x][y] ? 1 : 0;
+                }
+                
+                return (
+                    isAlive(x-1, y-1) + 
+                    isAlive(x-1, y) + 
+                    isAlive(x-1, y+1) + 
+                    isAlive(x, y-1) + 
+                    isAlive(x, y+1) + 
+                    isAlive(x+1, y-1) + 
+                    isAlive(x+1, y) + 
+                    isAlive(x+1, y+1)
+                );
+
+            }
+            
+            cells.forEach(function(row, x) {
+                result[x] = [];
+                row.forEach(function(cell, y) {
+                    var alive = 0,
+                        cn = neighbours(x, y);
+                    
+                    if (cell > 0) {
+                        alive = cn === 2 || cn === 3 ? 1 : 0;
+                    } else {
+                        alive = cn === 3 ? 1 : 0;
+                    }
+                    
+                    result[x][y] = alive;
+                });
+            });
+            
+            cells = result;
+            
+            paint();
+        }
+
+        function paint() {
+            canvas.clearRect(0, 0, canvas_config.style.width, canvas_config.style.height);
+            cells.forEach(function(row, x) {
+                row.forEach(function(cell, y) {
+                    canvas.beginPath();
+                    canvas.rect(x*canvas_config.style.cellsize, y*canvas_config.style.cellsize, canvas_config.style.cellsize, canvas_config.style.cellsize);
+                    if (cell) {
+                        canvas.fill();
+                    } else {
+                        canvas.stroke();
+                    }
+                });
+            });
+            setTimeout(function() {
+                //if(flag==1) 
+                update();
+            }, 200);
+            //window.requestAnimationFrame(update); 
+        }
+    </script>
+</body>
+</html>

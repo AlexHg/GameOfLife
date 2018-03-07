@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="c" width="1512" height="1512"></canvas>
+    <script>
+
+    var canvas = document.getElementById('c').getContext('2d'),
+        cells = [];
+    canvas.strokeStyle = '#e1e1e1';
+    canvas.fillStyle = 'black';
+
+    init();
+
+    function init() {
+        for (var i=0; i<64; i++) {
+            cells[i] = [];
+            for (var j=0; j<64; j++) {
+                cells[i][j] = 0;
+            }
+        }
+        
+
+        [ [30, 26],[31,26],[32,26],[33,26] ].forEach(function(point) {
+            cells[point[0]][point[1]] = 1;
+        });
+        
+        update();
+    }
+
+    function update() {
+        
+        var result = [];
+        
+        function _countNeighbours(x, y) {
+            var amount = 0;
+            
+            function _isFilled(x, y) {
+                return cells[x] && cells[x][y];
+            }
+            
+            if (_isFilled(x-1, y-1)) amount++;
+            if (_isFilled(x,   y-1)) amount++;
+            if (_isFilled(x+1, y-1)) amount++;
+            if (_isFilled(x-1, y  )) amount++;
+            if (_isFilled(x+1, y  )) amount++;
+            if (_isFilled(x-1, y+1)) amount++;
+            if (_isFilled(x,   y+1)) amount++;
+            if (_isFilled(x+1, y+1)) amount++;
+            
+            return amount;
+        }
+        
+        cells.forEach(function(row, x) {
+            result[x] = [];
+            row.forEach(function(cell, y) {
+                var alive = 0,
+                    count = _countNeighbours(x, y);
+                
+                if (cell > 0) {
+                    alive = count === 2 || count === 3 ? 1 : 0;
+                } else {
+                    alive = count === 3 ? 1 : 0;
+                }
+                
+                result[x][y] = alive;
+            });
+        });
+        
+        cells = result;
+        
+        draw();
+    }
+
+    function draw() {
+        canvas.clearRect(0, 0, 1512, 512);
+        cells.forEach(function(row, x) {
+            row.forEach(function(cell, y) {
+                canvas.beginPath();
+                canvas.rect(x*10, y*10, 10, 10);
+                if (cell) {
+                    canvas.fill();
+                } else {
+                    canvas.stroke();
+                }
+            });
+        });
+        setTimeout(function() {update();}, 200);
+        //window.requestAnimationFrame(update); // Too fast!
+    }
+    </script>
+</body>
+</html>
