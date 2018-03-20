@@ -5,133 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="gameoflife.css">
+    <script src="gameoflife_config.js"></script>
 </head>
 <body>
     <canvas 
         id="game-of-life"
-        width="1000"
-        height="1000"
-        data-cols="90"
-        data-rows="90"
-        data-frequency="200"
-        data-cellcolor="#e1e1e1"
-        data-fillcolor="green"
-        data-cellsize="8"
     ></canvas>
-    <script>
 
-        //Var declaration
-        var flag = 0;
-        var canvas_element = document.querySelector("#game-of-life"),
-            canvas_config = {
-                cols: canvas_element.dataset.cols,
-                rows: canvas_element.dataset.rows,
-                frequency: canvas_element.dataset.frequency,
-                style: {
-                    width: canvas_element.width,
-                    height: canvas_element.height,
-                    cellcolor: canvas_element.dataset.cellcolor,
-                    fillcolor: canvas_element.dataset.fillcolor,
-                    cellsize: canvas_element.dataset.cellsize
-                }
-            },
-            canvas = canvas_element.getContext('2d'), 
-            cells = [],
-            initial_state =[[60, 47],[61,47],[62,47],
-                            [60, 48],[61,48],[62,48],
-                            [60, 49],[61,49],[62,49],]
+    <form name="controls" id="controls">
+        Configuracion inicial
+        <br><br>
+        Regla Nacimiento <br>
+        <input type="number" name="born" value="3"><br><br>
+        Regla supervivencia 1. <br>
+        <input type="number" name="superu" value="2"><br><br>
+        Regla supervivencia 2. <br>
+        <input type="number" name="superd" value="3"><br><br>
+        Ancho: <br>
+        <input type="number" name="width" value="1500"><br><br>
+        Alto: <br>
+        <input type="number" name="height" value="1500"><br><br>
+        Columnas: <br>
+        <input type="number" name="cols" value="150"><br><br>
+        Filas: <br>
+        <input type="number" name="rows" value="90"><br><br>
+        Frecuencia: <br>
+        <input type="number" name="freq" value="70"><br><br>
+        Color de celdas: <br>
+        <input type="text" name="cellcolor" value="#e1e1e1"><br><br>
+        Color de celulas: <br>
+        <select name="fillcolor" id="fillcolor">
+            <option value="#337ab7">Azul</option>
+            <option value="green">Verde</option>
+            <option value="#57bba3">Verde2</option>
+            <option value="#fe0081">Rosa</option>
+            <option value="#f3c30d">Amarillo</option>
+        </select>
+        <br><br>
+        Zoom: <br>
+        <input type="number" name="zoom" min="1" value="6"><br><br>
+        Estructura: <br>
+        <select id="structure" name="structure">
+            <option value="random">Random</option>
+            <option value="glider_gun">Glider Gun</option>
+            <option value="sonar">Sonar</option>
+            <option value="blinkers">Blinkers</option>
+            <option value="ppattern">Patron 1</option>
+            <option value="ppattern2">Patron 2</option>
+        </select>
+        <br><br>
+        Taza de vivencia: (%)<br> -SOLO RANDOM- <br>
+        <input type="number" name="rate" min="1" value="15">
+        
+        <br><br>
+        <button type="button" onclick="start()">Iniciar</button>
+    </form>
 
-        canvas.strokeStyle = canvas_config.style.cellcolor;
-        canvas.fillStyle = canvas_config.style.fillcolor;
+    <section id="bench" style="display:flex; justify-content:flex-start; ">
+        <div style="width:150px; display:inline-block;">
+            Benchmark
+            <div id="alive">
+                Vivos: <span class="value">0</span>
+            </div>
+            <div id="generation">
+                Generacion: <span class="value">0</span>
+            </div>
+            <div id="promedio">
+                Promedio: <span class="value">0</span>
+            </div>
+        </div>
+        <div id="chartContainer" style="height: 150px; max-width: 120px;display:inline-block;"></div>
+    </section>
+    
 
-        start();
 
-        function start() {
-            
-            killcell(canvas_config.rows,canvas_config.cols);
-
-            
-            initial_state.forEach(function(point) {
-                console.log(point)
-                cells[point[0]][point[1]] = 1;
-            });
-            
-            update();
-        }
-
-        function killcell(rows, cols){
-            for (var i=0; i < cols; i++) {
-                cells[i] = [];
-                for (var j=0; j < rows; j++) {
-                    cells[i][j] = 0;
-                }
-            }
-        }
-
-        function update() {
-            
-            var result = [];
-            
-            function neighbours(x, y) {
-                var neighbours = 0;
-                
-                function isAlive(x, y) {
-                    return cells[x] && cells[x][y] ? 1 : 0;
-                }
-                
-                return (
-                    isAlive(x-1, y-1) + 
-                    isAlive(x-1, y) + 
-                    isAlive(x-1, y+1) + 
-                    isAlive(x, y-1) + 
-                    isAlive(x, y+1) + 
-                    isAlive(x+1, y-1) + 
-                    isAlive(x+1, y) + 
-                    isAlive(x+1, y+1)
-                );
-
-            }
-            
-            cells.forEach(function(row, x) {
-                result[x] = [];
-                row.forEach(function(cell, y) {
-                    var alive = 0,
-                        cn = neighbours(x, y);
-                    
-                    if (cell > 0) {
-                        alive = cn === 2 || cn === 3 ? 1 : 0;
-                    } else {
-                        alive = cn === 3 ? 1 : 0;
-                    }
-                    
-                    result[x][y] = alive;
-                });
-            });
-            
-            cells = result;
-            
-            paint();
-        }
-
-        function paint() {
-            canvas.clearRect(0, 0, canvas_config.style.width, canvas_config.style.height);
-            cells.forEach(function(row, x) {
-                row.forEach(function(cell, y) {
-                    canvas.beginPath();
-                    canvas.rect(x*canvas_config.style.cellsize, y*canvas_config.style.cellsize, canvas_config.style.cellsize, canvas_config.style.cellsize);
-                    if (cell) {
-                        canvas.fill();
-                    } else {
-                        canvas.stroke();
-                    }
-                });
-            });
-            setTimeout(function() {
-                //if(flag==1) 
-                update();
-            }, 200);
-            //window.requestAnimationFrame(update); 
-        }
-    </script>
+    <footer>
+        
+        <script src="canvasjs.min.js"></script>
+        <script src="gameoflife.js"></script>
+        <script>//start();</script>
+    </footer>
 </body>
 </html>

@@ -1,0 +1,27 @@
+#controls{
+    width: 200px;
+    min-height: 300px;
+    top:10px;
+    right:10px;
+}
+
+#controls, section#bench{
+    max-height: 90vh;
+    overflow-y: scroll;
+    background: white;
+    border: 1px solid gray;
+    box-shadow: -5px 5px 5px rgba(0,0,0,.5);
+    position: fixed;
+    padding: 1rem;
+}
+
+body{
+    margin-bottom:200px;
+}
+
+section#bench{
+    width: 670px;
+    height: 150px;
+    bottom: 10px;
+    left: 10px;
+} 
