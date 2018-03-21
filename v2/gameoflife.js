@@ -50,6 +50,9 @@ var generation = 0;
 var dataPlot = [];
 var suma = 0;
 var promedio = 0;
+var inig = 0;
+var fing = 0;
+
 function benchmark(){
     if(!bench_start){
         plotting();
@@ -61,8 +64,8 @@ function benchmark(){
             suma += alive_count;
             promedio = suma/dataPlot.length;
             document.querySelector("#promedio .value").innerText = parseInt(promedio);
-            
-        },100);  
+            if(generation == 1000) document.querySelector("#fin .value").innerText = alive_count;
+        },canvas_config.frequency);  
         setInterval(plotting,1000)
  
     }
@@ -93,6 +96,8 @@ function start() {
     promedio = 0;
     inid = true;
     flag = 1;
+    inig = 0;
+    fing = 0;
     if(cells.lenght > 0){
         antcell = cells;
     }
@@ -103,7 +108,8 @@ function start() {
         killcell(canvas_config.rows,canvas_config.cols);        
         
         initialState();
-
+        inig = alive_count;
+        document.querySelector("#inicio .value").innerText = inig;
         flag = 0;
         paint();
     },canvas_config.frequency*3)
@@ -267,6 +273,14 @@ function update() {
                 alive = cn === canvas_config.rules.born ? 1 : 0;
                 alive_count += alive;
             }
+            /*
+            if (cell > 0) {
+                alive = cn === 7 ? 1 : 0;
+                alive_count += (alive-1); 
+            } else {
+                alive = cn === 2 ? 1 : 0;
+                alive_count += alive;
+            }*/
             
             result[x][y] = alive;
         });

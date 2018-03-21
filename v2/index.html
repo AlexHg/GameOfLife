@@ -14,26 +14,16 @@
     ></canvas>
 
     <form name="controls" id="controls">
-        Configuracion inicial
-        <br><br>
-        Regla Nacimiento <br>
-        <input type="number" name="born" value="3"><br><br>
-        Regla supervivencia 1. <br>
-        <input type="number" name="superu" value="2"><br><br>
-        Regla supervivencia 2. <br>
-        <input type="number" name="superd" value="3"><br><br>
-        Ancho: <br>
-        <input type="number" name="width" value="1500"><br><br>
-        Alto: <br>
-        <input type="number" name="height" value="1500"><br><br>
-        Columnas: <br>
-        <input type="number" name="cols" value="150"><br><br>
-        Filas: <br>
-        <input type="number" name="rows" value="90"><br><br>
-        Frecuencia: <br>
-        <input type="number" name="freq" value="70"><br><br>
-        Color de celdas: <br>
-        <input type="text" name="cellcolor" value="#e1e1e1"><br><br>
+        Configuracion inicial<br><br>
+        Regla Nacimiento <br><input type="number" name="born" value="3"><br><br>
+        Regla supervivencia 1. <br><input type="number" name="superu" value="2"><br><br>
+        Regla supervivencia 2. <br><input type="number" name="superd" value="3"><br><br>
+        Ancho: <br><input type="number" name="width" value="1500"><br><br>
+        Alto: <br><input type="number" name="height" value="1500"><br><br>
+        Columnas: <br><input type="number" name="cols" value="150"><br><br>
+        Filas: <br><input type="number" name="rows" value="90"><br><br>
+        Frecuencia: <br><input type="number" name="freq" value="5"><br><br>
+        Color de celdas: <br><input type="text" name="cellcolor" value="#e1e1e1"><br><br>
         Color de celulas: <br>
         <select name="fillcolor" id="fillcolor">
             <option value="#337ab7">Azul</option>
@@ -43,8 +33,7 @@
             <option value="#f3c30d">Amarillo</option>
         </select>
         <br><br>
-        Zoom: <br>
-        <input type="number" name="zoom" min="1" value="6"><br><br>
+        Zoom: <br><input type="number" name="zoom" min="1" value="7"><br><br>
         Estructura: <br>
         <select id="structure" name="structure">
             <option value="random">Random</option>
@@ -55,9 +44,7 @@
             <option value="ppattern2">Patron 2</option>
         </select>
         <br><br>
-        Taza de vivencia: (%)<br> -SOLO RANDOM- <br>
-        <input type="number" name="rate" min="1" value="15">
-        
+        Taza de vivencia: (%)<br> -SOLO RANDOM- <br><input type="number" name="rate" min="1" value="15">
         <br><br>
         <button type="button" onclick="start()">Iniciar</button>
     </form>
@@ -72,7 +59,13 @@
                 Generacion: <span class="value">0</span>
             </div>
             <div id="promedio">
-                Promedio: <span class="value">0</span>
+                Tendencia: <span class="value">0</span>
+            </div>
+            <div id="inicio">
+                Inicio en: <span class="value">0</span>
+            </div>
+            <div id="fin">
+                A las 1000 gen: <span class="value">0</span>
             </div>
         </div>
         <div id="chartContainer" style="height: 150px; max-width: 120px;display:inline-block;"></div>
@@ -84,7 +77,6 @@
         
         <script src="canvasjs.min.js"></script>
         <script src="gameoflife.js"></script>
-        <script>//start();</script>
     </footer>
 </body>
 </html>
