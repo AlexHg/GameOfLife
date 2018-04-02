@@ -1,32 +1,31 @@
+// Size of cells
+int cellSize = 3;
 
-int cellSize = 5; // Tamaño de las celdas (PX)
-float probabilityOfAliveAtStart = 15; // Probabilidad de iniciar vivo 
+// How likely for a cell to be alive at start (in percentage)
+float probabilityOfAliveAtStart = 15;
 
-int interval = 1; // TIMER (1)
-int lastRecordedTime = 0; // TIMER (2)
+// Variables for timer
+int interval = 1;
+int lastRecordedTime = 0;
 
-color azul = color(51, 121, 180);
-color verde = color(0, 200, 0);
-color rosa = color(254, 0, 129);
-color amarillo = color(243, 197, 13);
-color negro = color(0);
+// Colors for active/inactive cells
+color alive = color(0, 200, 0);
+color dead = color(0);
 
-color alive = azul; // Color vivos
-color dead = negro; // Color muertos/vacio
+// Array of cells
+int[][] cells; 
+// Buffer to record the state of the cells and use this while changing the others in the interations
+int[][] cellsBuffer; 
 
-int[][] cells; // Matriz del juego
-int[][] cellsBuffer; // Buffer del juego (Mientras se cambia la matriz principal, se usa esta) -Buffer to record the state of the cells and use this while changing the others in the interations
-
-boolean pause = false; // Pausa
+// Pause
+boolean pause = false;
 
 void setup() {
-  println("Dimensiones de la matriz");
-  println(width/cellSize);
-  println(height/cellSize);
-  size (1580, 700);
+  size (1080, 720);
 
-  cells = new int[width/cellSize][height/cellSize]; //Inicia las matrices
-  cellsBuffer = new int[width/cellSize][height/cellSize]; //Inicia las matrices
+  // Instantiate arrays 
+  cells = new int[width/cellSize][height/cellSize];
+  cellsBuffer = new int[width/cellSize][height/cellSize];
 
   // This stroke will draw the background grid
   stroke(48);
