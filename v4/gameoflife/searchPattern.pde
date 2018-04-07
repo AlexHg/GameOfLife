@@ -1,16 +1,23 @@
 
 
-int ssub = 2;
+int ssub = 4;
 int sdimX = 500;
 int sdimY = 500;
 int[][][] subpat;
+int[][][] patternsCollection;
 int[][] pats;
 int patsC = 0;
 int it = 0;
+int itpc = 0;
+String patternsCollectionOut = "";
 //Busqueda de coincidencias
 void searching(){
   //Tamaño del subconjunto a estudiar
-  
+  if(itpc >= 1000 ){
+    println(patternsCollectionOut);
+    itpc = 0;
+    patternsCollection = new int[dimX][dimY][1000];
+  }
   if(it >= 10){
     int[][][] subpatBuffer = new int[dimX][dimY][10];
     int[][] searchFBuffer = new int[dimX][dimY];
@@ -26,7 +33,7 @@ void searching(){
     it = 1;
     for (int x=0; x<dimX; x++) {
       for (int y=0; y<dimY; y++) {
-        if(pats[x][y] > 3){
+        if(patsBuffer[x][y] > 3 ){
           subpat[x][y][0] = subpatBuffer[x][y][0];
           searchF[x][y] = searchFBuffer[x][y];
           pats[x][y] = patsBuffer[x][y];
@@ -39,8 +46,6 @@ void searching(){
     //pats = new int[100][2];
   }
   
-  int xc = 0;
-  int yc = 0;
   
    
   for (int x=0; x<sdimX; x+=ssub) {
@@ -54,9 +59,11 @@ void searching(){
         }
         //println();
       }
+      //println(bin);
+      int binDec = unbinary(bin);
       
-      byte binDec = Byte.parseByte(bin,2);
       subpat[x][y][it] = binDec;
+      patternsCollection[x][y][itpc] = binDec;
       for(int i = it-1; i > 0; i--){
         if(subpat[x][y][i] == binDec){
           if(binDec != 0 ){
@@ -76,15 +83,61 @@ void searching(){
           
         }
       }
-      //println(Byte.parseByte(bin,2));
-      //println();
+
+
+    }
+
+  }
+  int patcont = 0;
+   for (int x=0; x<sdimX; x+=ssub) {
+    
+    for (int y=0; y<sdimY; y+=ssub) {
+      int itpc2 = itpc-10;
+      if(itpc2 < 0){
+        itpc2 = 0;
+      }
       
-      yc++;
+      int dontcont = 0;
+      if(patternsCollection[x][y][itpc] == 0){
+        dontcont += 10;
+      }
+      for(int dc = itpc2; dc < itpc; dc++){
+        if(patternsCollection[x][y][dc] == patternsCollection[x][y][itpc]){
+          dontcont++;
+        }
+        if(patternsCollection[x][y][dc] == patternsCollection[x][y][dc+1]){
+          dontcont++;
+        }
+      }
+      
+      if(searchF[x][y]==1 && pats[x][y] > 3 && dontcont < 4){
+        patcont++;
+        //print("[");
+        int ini = itpc-10;
+        if(ini < 0){
+          ini = 0;
+        }
+        for (int z=ini; z<itpc; z++) {
+           //print(patternsCollection[x][y][z]+",");
+        }
+        //print("]");
+        //println();
+      }
+      
     }
     
-    xc++;
   }
+
   it++;
-  //println(it);
+  itpc++;
+  
+  aliveSum += aliveCont;
+  aliveProm = aliveSum/genCont;
+  println("Generacion: "+genCont+"; Nuevos patrones encontrados: "+patcont+";");
+  println("Inicio: "+aliveIni+"; Con vida: "+aliveCont+"; Tendencia: "+aliveProm+";");
+  if(aliveFin != 0){
+     println("A las 1000 generaciones: "+aliveFin);
+  }
+  println("=================================================");
   
 }

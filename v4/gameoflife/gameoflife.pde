@@ -1,6 +1,6 @@
 int[][] searchF;
 int cellSize= 1; // Tamaño de las celdas (PX)
-float probabilityOfAliveAtStart = 15; // Probabilidad de iniciar vivo 
+float probabilityOfAliveAtStart = 30; // Probabilidad de iniciar vivo 
 
 float interval = 1; // TIMER (1)
 int lastRecordedTime = 0; // TIMER (2)
@@ -21,13 +21,15 @@ boolean pause = false; // Pausa
 int dimX; //= width/cellSize;
 int dimY; //= height/cellSize;
 
-
-
+int aliveCont = 0;
+int aliveProm = 0;
+int aliveSum = 0;
+int aliveIni = 0;
+int aliveFin = 0;
+int genCont = 0;
 void setup() {
   
-  if("hola" == "hola"){
-    println("siii");
-  }
+
   //jsonf();
   dimX = 500;//width/cellSize;
   dimY = 500;//height/cellSize;
@@ -38,7 +40,8 @@ void setup() {
   size (1000, 1000);
   surface.setResizable(true);
 
-  subpat = new int[dimX][dimY][100];
+  patternsCollection = new int[dimX][dimY][1000];
+  subpat = new int[dimX][dimY][10];
   cells = new int[dimX][dimY]; //Inicia las matrices
   searchF = new int[dimX][dimY];
   pats = new int[dimX][dimY];
@@ -58,11 +61,13 @@ void setup() {
       }
       else {
         state = 1;
+        aliveCont++;
       }
       cells[x][y] = int(state); 
       searchF[x][y] = 0;
     }
   }
+  aliveIni = aliveCont;
   background(0); 
   
   //thread("searching");
@@ -111,6 +116,12 @@ void draw() {
 
 
 void iteration() { // iteracion
+  // Si pasó la generación 1000, guarda el valor para mostrarlo
+  if(genCont == 1000){
+    aliveFin = aliveCont;
+  }
+  genCont++;
+  
   // Guarda la grilla en un bufer 
   for (int x=0; x<dimX; x++) {
     for (int y=0; y<dimY; y++) {
@@ -140,10 +151,12 @@ void iteration() { // iteracion
       if (cellsBuffer[x][y]==1) {
         if (neighbours < 2 || neighbours > 3) {
           cells[x][y] = 0; 
+          aliveCont--;
         }
       } 
       else if (neighbours == 3 ) {
           cells[x][y] = 1; 
+          aliveCont++;
       } 
     }
   } 
