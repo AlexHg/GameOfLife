@@ -10,6 +10,11 @@ int patsC = 0;
 int it = 0;
 int itpc = 0;
 String patternsCollectionOut = "";
+
+int patSum = 0;
+int patProm = 0;
+int patFin = 0;
+
 //Busqueda de coincidencias
 void searching(){
   //Tamaño del subconjunto a estudiar
@@ -47,27 +52,30 @@ void searching(){
   }
   
   
-   
+   // Recorre la grilla en bloques de tamaño "ssubxssub"
   for (int x=0; x<sdimX; x+=ssub) {
     
     for (int y=0; y<sdimY; y+=ssub) {
-      //print(x+","+y+"\n");
       String bin = "";
+      //Transforma el bloque en un numero binario
       for(int fx = 0; fx < ssub; fx++){
         for(int fy = 0; fy < ssub; fy++){
           bin += cells[x+fx][y+fy];
         }
-        //println();
       }
-      //println(bin);
+      
+      //Conversion binario a decimal
       int binDec = unbinary(bin);
       
+      //Guarda el valor decimal obtenido 
       subpat[x][y][it] = binDec;
       patternsCollection[x][y][itpc] = binDec;
+      
+      //Recorre las generaciones en busqueda de patrones
       for(int i = it-1; i > 0; i--){
         if(subpat[x][y][i] == binDec){
           if(binDec != 0 ){
-            //println("Patron encontrado: "+binDec+" en "+x+","+y+" entre "+it+" y "+ i);
+            
             for(int xi = 0; xi < ssub; xi++){
               for(int yi = 0; yi < ssub; yi++){
                 
@@ -75,7 +83,7 @@ void searching(){
                 pats[x+xi][y+yi]++;
               }
             }
-            break;
+            break;// Si encuentra coincidencia rompe con la busqueda del patron
           }
           
           //pats[patsC][patsC] = 1;
@@ -89,7 +97,7 @@ void searching(){
 
   }
   int patcont = 0;
-   for (int x=0; x<sdimX; x+=ssub) {
+  for(int x=0; x<sdimX; x+=ssub) {
     
     for (int y=0; y<sdimY; y+=ssub) {
       int itpc2 = itpc-10;
@@ -112,6 +120,9 @@ void searching(){
       
       if(searchF[x][y]==1 && pats[x][y] > 3 && dontcont < 4){
         patcont++;
+        patsC++;
+        patSum += patcont;
+        patProm = patsC/genCont;
         //print("[");
         int ini = itpc-10;
         if(ini < 0){
@@ -131,10 +142,10 @@ void searching(){
   it++;
   itpc++;
   
-  aliveSum += aliveCont;
-  aliveProm = aliveSum/genCont;
-  println("Generacion: "+genCont+"; Nuevos patrones encontrados: "+patcont+";");
-  println("Inicio: "+aliveIni+"; Con vida: "+aliveCont+"; Tendencia: "+aliveProm+";");
+ 
+  println("Generacion: "+genCont+";");
+  println("Nuevos patrones encontrados: "+patcont+"; Tendencia (patrones): "+patProm+";");
+  println("Inicio: "+aliveIni+"; Con vida: "+aliveCont+"; Tendencia (vivos): "+aliveProm+";");
   if(aliveFin != 0){
      println("A las 1000 generaciones: "+aliveFin);
   }

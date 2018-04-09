@@ -1,5 +1,5 @@
 int[][] searchF;
-int cellSize= 1; // Tamaño de las celdas (PX)
+int cellSize= 2; // Tamaño de las celdas (PX)
 float probabilityOfAliveAtStart = 30; // Probabilidad de iniciar vivo 
 
 float interval = 1; // TIMER (1)
@@ -15,7 +15,7 @@ color alive = azul; // Color vivos
 color dead = negro; // Color muertos/vacio
 
 int[][] cells; // Matriz del juego
-int[][] cellsBuffer; // Buffer del juego (Mientras se cambia la matriz principal, se usa esta) -Buffer to record the state of the cells and use this while changing the others in the interations
+int[][] cellsBuffer; // Buffer del juego (Mientras se cambia la matriz principal, se usa esta) 
 
 boolean pause = false; // Pausa
 int dimX; //= width/cellSize;
@@ -160,4 +160,6 @@ void iteration() { // iteracion
       } 
     }
   } 
+  aliveSum += aliveCont;
+  aliveProm = aliveSum/genCont;
 } 
