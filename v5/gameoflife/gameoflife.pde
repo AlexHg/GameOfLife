@@ -1,4 +1,4 @@
-
+int[][] searchF;
 int cellSize= 2; // Tamaño de las celdas (PX)
 float probabilityOfAliveAtStart = 30; // Probabilidad de iniciar vivo 
 
@@ -40,7 +40,7 @@ void setup() {
   size (1000, 1000);
   surface.setResizable(true);
 
-  //patternsCollection = new int[dimX][dimY][1000];
+  patternsCollection = new int[dimX][dimY][1000];
   subpat = new int[dimX][dimY][10];
   cells = new int[dimX][dimY]; //Inicia las matrices
   searchF = new int[dimX][dimY];

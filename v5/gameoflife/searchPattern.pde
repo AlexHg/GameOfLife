@@ -1,36 +1,50 @@
 
-int[][] searchF;
-int ssub = 4;
-int sdimX = 500;
-int sdimY = 500;
-int[][][] subpat;
-//int[][][] patternsCollection;
 
+int ssub = 4;
+int sdimX = 100;
+int sdimY = 100;
+
+int whenSave = 50; //Guardar a las x iteraciones
+int save = 1;
+int saveOnce = 0;
+int saveCount = 0;
+
+int[][][] subpat;
+int[][][] patternsCollection;
 int[][] pats;
 int patsC = 0;
 int it = 0;
 int itpc = 0;
-//String patternsCollectionOut = "";
+String patternsCollectionOut = "";
 
 int patSum = 0;
 int patProm = 0;
 int patFin = 0;
 
-
-//inicializa la tabla hash: Coleccion de patrones
-ArrayList<HashMap<Integer,Integer>> patternCollection = new ArrayList<HashMap<Integer,Integer>>();
-
-
 //Busqueda de coincidencias
 void searching(){
-  if(patternCollection.size() == 0){
-    patternCollection.add( new HashMap<Integer,Integer>() );
-  }
   //Tamaño del subconjunto a estudiar
-  if(itpc >= 1000 ){
+  if(itpc >= whenSave ){
     //println(patternsCollectionOut);
     itpc = 0;
-    //patternsCollection = new int[dimX][dimY][1000];
+    patternsCollection = new int[dimX][dimY][1000];
+    
+    if(save == 1){
+      
+      int zi = patternsCollectionOut.length();
+      
+      if(zi == 0){
+        zi = 1;
+       }
+     
+       if(saveOnce == 1){
+         save = 0;
+       }
+           
+       saveStrings("patternCollection/patternCollection"+saveCount+".txt", split(patternsCollectionOut, "/"));
+       saveCount++;
+       patternsCollectionOut = "";
+    }
   }
   if(it >= 10){
     int[][][] subpatBuffer = new int[dimX][dimY][10];
@@ -78,27 +92,16 @@ void searching(){
       
       //Guarda el valor decimal obtenido 
       subpat[x][y][it] = binDec;
-      //patternsCollection[x][y][itpc] = binDec;
+      patternsCollection[x][y][itpc] = binDec;
       
       //Recorre las generaciones en busqueda de patrones
       for(int i = it-1; i > 0; i--){
-        if(subpat[x][y][i] == binDec){ // Patron encontrado
-          if(binDec != 0 ){ // Verifica que no recurra al 0
-          
-            
-            for(HashMap pattern: patternCollection){   //int xc=0; xc<patternCollection.size(); xc++){ // Recorre la lista de patrones
-              for(int pcol = it; pcol > 0; i--){ // Recorre el subconjunto de analisis (los bloques de 5x5)
-                if(pattern.get(subpat[x][y][pcol]) != null && pattern.get(subpat[x][y][pcol-1]) != null && subpat[x][y][pcol-1] != subpat[x][y][pcol]) { // Verifica si existe ya dicha entrada y que el estado actual no sea igual al anterior
-                  pattern.put(subpat[x][y][pcol-1], subpat[x][y][pcol]);
-                  println("in");
-                }
-                      
-              }
-            }
-            
+        if(subpat[x][y][i] == binDec){
+          if(binDec != 0 ){
             
             for(int xi = 0; xi < ssub; xi++){
               for(int yi = 0; yi < ssub; yi++){
+                
                 searchF[x+xi][y+yi] = cells[x+xi][y+yi];
                 pats[x+xi][y+yi]++;
               }
@@ -125,7 +128,7 @@ void searching(){
         itpc2 = 0;
       }
       
-      /*int dontcont = 0;
+      int dontcont = 0;
       if(patternsCollection[x][y][itpc] == 0){
         dontcont += 10;
       }
@@ -136,23 +139,32 @@ void searching(){
         if(patternsCollection[x][y][dc] == patternsCollection[x][y][dc+1]){
           dontcont++;
         }
-      }*/
+      }
       
-      if(searchF[x][y]==1 && pats[x][y] > 3 /*&& dontcont < 4*/){
+      if(searchF[x][y]==1 && pats[x][y] > 3 && dontcont < 4 ){
         patcont++;
         patsC++;
         patSum += patcont;
         patProm = patsC/genCont;
         //print("[");
-        int ini = itpc-10;
-        if(ini < 0){
-          ini = 0;
+        if(save == 1 && itpc > 5){
+          patternsCollectionOut += "[";
+          int ini = itpc-10;
+          if(ini < 0){
+            ini = 0;
+          }
+          for (int z=ini; z<itpc; z++) {
+            patternsCollectionOut += patternsCollection[x][y][z];
+             //print(patternsCollection[x][y][z]+",");
+             if(z < itpc-1){
+               patternsCollectionOut += ",";
+             }
+          }
+          patternsCollectionOut += "]/";
+          //print("]");
+          //println();
         }
-        for (int z=ini; z<itpc; z++) {
-           //print(patternsCollection[x][y][z]+",");
-        }
-        //print("]");
-        //println();
+        
       }
       
     }
@@ -169,6 +181,8 @@ void searching(){
   if(aliveFin != 0){
      println("A las 1000 generaciones: "+aliveFin);
   }
-  println("=============================================================");
+  println("=================================================");
+  
+  
   
 }
